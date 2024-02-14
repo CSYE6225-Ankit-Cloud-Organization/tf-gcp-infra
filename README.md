@@ -13,7 +13,7 @@ compute.googleapis.com</p>
     This installs the required providers and other plugins for our infrastructure.<br>
     <code>terraform init</code></li>
     
-  <li>Create a <code>&lt;filename&gt;.tfvars</code> using the <code>example.tfvars</code> template.</li>
+  <li>Create a <code>&lt;filename&gt;.tfvars</code></li>
   
   <li>Correct the formatting of your terraform code (optional)<br>
     <ol type="a">
