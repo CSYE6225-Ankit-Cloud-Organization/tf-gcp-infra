@@ -88,3 +88,59 @@ variable "priority_public_subnet_route" {
 variable "tags_public_subnet_route" {
   type = list(string)
 }
+
+# compute instance variables
+
+variable "instance_name" {
+  type    = string
+  default = "cyse-demovm"
+}
+
+variable "machine_type" {
+  type    = string
+  default = "e2-small"
+}
+
+variable "instance_zone" {
+  type    = string
+  default = "uscentral1-a"
+}
+
+variable "boot_disk_image" {
+  type = string
+}
+
+variable "boot_disk_type" {
+  type = string
+}
+
+variable "boot_disk_size" {
+  type = number
+}
+
+variable "boot_disk_autodelete" {
+  type    = bool
+  default = true
+}
+
+variable "instance_network_tier" {
+  type    = string
+  default = "STANDARD"
+}
+
+variable "app_firewall_name" {
+  type    = string
+  default = "webapp-firewall"
+}
+
+variable "app_firewall_protocol" {
+  type    = string
+  default = "TCP"
+}
+
+variable "firwall_ports" {
+  type    = list(string)
+  default = ["6225"]
+}
+
+
