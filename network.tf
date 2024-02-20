@@ -25,7 +25,7 @@ resource "google_compute_subnetwork" "private_subnet" {
   ip_cidr_range            = cidrsubnet(var.private_subnet_cidr_base, 8, count.index)
   private_ip_google_access = var.enable_private_ip_private_subnet
   stack_type               = var.stack_type
-
+}
 
 # Add routes to 0.0.0.0/0 for the public subnets resources
 resource "google_compute_route" "public_subnet_route" {
