@@ -53,6 +53,10 @@ resource "google_compute_instance" "my_instance" {
       size  = var.boot_disk_size
     }
   }
+  service_account {
+    email  = "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
 
   tags = var.tags_public_subnet_route
 
@@ -66,17 +70,33 @@ resource "google_compute_instance" "my_instance" {
 
 }
 
-# create a firewall rule for public subnet
+# create a firewall rule to allow application port ingress traffic
 resource "google_compute_firewall" "allow_http" {
-  count   = var.num_vpcs
-  name    = var.app_firewall_name
-  network = google_compute_network.vpc[count.index].name
+  count     = var.num_vpcs
+  name      = var.webapp_allow_tcp_firewall_name
+  network   = google_compute_network.vpc[count.index].name
+  direction = var.firewall_direction_ingress
 
   allow {
-    protocol = var.app_firewall_protocol
-    ports    = var.firwall_ports
+    protocol = var.app_firewall_protocol_tcp
+    ports    = var.firewall_ports_allow_tcp
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = var.firewall_source_ranges
+  target_tags   = var.tags_public_subnet_route
+}
+
+# create a firewall rule to deny ssh ingress traffic
+resource "google_compute_firewall" "deny_ssh" {
+  count     = var.num_vpcs
+  name      = var.webapp_deny_ssh_firewall_name
+  network   = google_compute_network.vpc[count.index].name
+  direction = var.firewall_direction_ingress
+
+  deny {
+    protocol = var.app_firewall_protocol_tcp
+    ports    = var.firewall_ports_deny_ssh
+  }
+  source_ranges = var.firewall_source_ranges
   target_tags   = var.tags_public_subnet_route
 }

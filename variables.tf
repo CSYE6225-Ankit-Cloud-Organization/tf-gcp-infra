@@ -103,7 +103,7 @@ variable "machine_type" {
 
 variable "instance_zone" {
   type    = string
-  default = "uscentral1-a"
+  default = "us-central1-a"
 }
 
 variable "boot_disk_image" {
@@ -128,19 +128,45 @@ variable "instance_network_tier" {
   default = "STANDARD"
 }
 
-variable "app_firewall_name" {
+# firewall setup variables
+variable "webapp_allow_tcp_firewall_name" {
   type    = string
-  default = "webapp-firewall"
+  default = "webapp-allow-tcp"
 }
 
-variable "app_firewall_protocol" {
+variable "webapp_deny_ssh_firewall_name" {
+  type    = string
+  default = "webapp-deny-ssh"
+}
+variable "app_firewall_protocol_tcp" {
   type    = string
   default = "TCP"
 }
 
-variable "firwall_ports" {
+variable "firewall_ports_allow_tcp" {
   type    = list(string)
   default = ["6225"]
 }
+
+variable "firewall_ports_deny_ssh" {
+  type    = list(string)
+  default = ["22"]
+}
+
+variable "firewall_source_ranges" {
+  type    = list(string)
+  default = ["0.0.0.0/0"]
+}
+variable "firewall_direction_ingress" {
+  type    = string
+  default = "INGRESS"
+}
+
+variable "firewall_direction_egress" {
+  type    = string
+  default = "EGRESS"
+}
+
+
 
 
