@@ -134,23 +134,23 @@ variable "webapp_allow_tcp_firewall_name" {
   default = "webapp-allow-tcp"
 }
 
-variable "webapp_deny_ssh_firewall_name" {
+variable "webapp_deny_all_firewall_name" {
   type    = string
-  default = "webapp-deny-ssh"
+  default = "webapp-deny-all"
 }
 variable "app_firewall_protocol_tcp" {
   type    = string
   default = "TCP"
 }
 
+variable "app_firewall_protocol_all" {
+  type    = string
+  default = "ALL"
+}
+
 variable "firewall_ports_allow_tcp" {
   type    = list(string)
   default = ["6225"]
-}
-
-variable "firewall_ports_deny_ssh" {
-  type    = list(string)
-  default = ["22"]
 }
 
 variable "firewall_source_ranges" {
@@ -166,6 +166,12 @@ variable "firewall_direction_egress" {
   type    = string
   default = "EGRESS"
 }
+
+variable "firewall_allow_priority" {
+  type    = number
+  default = 900
+}
+
 
 
 
