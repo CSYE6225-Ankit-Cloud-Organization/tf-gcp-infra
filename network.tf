@@ -38,34 +38,6 @@ resource "google_compute_route" "public_subnet_route" {
   tags             = var.tags_public_subnet_route
 }
 
-# create VM from the custom image
-resource "google_compute_instance" "my_instance" {
-  count        = var.num_vpcs
-  name         = var.instance_name
-  machine_type = var.machine_type
-  zone         = var.instance_zone
-
-  boot_disk {
-    auto_delete = var.boot_disk_autodelete
-    initialize_params {
-      image = var.boot_disk_image
-      type  = var.boot_disk_type
-      size  = var.boot_disk_size
-    }
-  }
-
-  tags = var.tags_public_subnet_route
-
-  network_interface {
-    access_config {
-      network_tier = var.instance_network_tier
-    }
-
-    subnetwork = google_compute_subnetwork.public_subnet[count.index].self_link
-  }
-
-}
-
 # create a firewall rule to allow application port ingress traffic with priority 900
 resource "google_compute_firewall" "allow_tcp" {
   count     = var.num_vpcs
@@ -95,3 +67,81 @@ resource "google_compute_firewall" "deny_ssh" {
   source_ranges = var.firewall_source_ranges
   target_tags   = var.tags_public_subnet_route
 }
+
+# [START compute_internal_ip_private_access]
+resource "google_compute_global_address" "default" {
+  count         = var.num_vpcs
+  name          = var.global_address_name
+  address_type  = var.global_address_addresstype
+  prefix_length = var.global_address_prefix_length
+  purpose       = var.global_address_purpose
+  network       = google_compute_network.vpc[count.index].id
+}
+resource "google_service_networking_connection" "private_service_access" {
+  count                   = var.num_vpcs
+  network                 = google_compute_network.vpc[count.index].self_link # Replace with the name or self-link of your custom VPC network
+  service                 = var.network_connection_servicename
+  reserved_peering_ranges = [google_compute_global_address.default[count.index].name]
+  depends_on              = [google_compute_global_address.default]
+  deletion_policy         = var.delection_policy
+}
+resource "google_compute_firewall" "deny_db_access" {
+  count              = var.num_vpcs
+  name               = var.firewall_deny_db_access_name
+  network            = google_compute_network.vpc[count.index].name
+  direction          = var.firewall_direction_egress
+  destination_ranges = ["${google_compute_global_address.default[count.index].address}/${var.global_address_prefix_length}"]
+  deny {
+    protocol = var.app_firewall_protocol_all
+  }
+  depends_on = [google_compute_global_address.default]
+}
+
+resource "google_compute_firewall" "allow_db" {
+  count              = var.num_vpcs
+  name               = var.firewall_allow_db_access_name
+  network            = google_compute_network.vpc[count.index].name
+  direction          = var.firewall_direction_egress
+  destination_ranges = ["${google_compute_global_address.default[count.index].address}/${var.global_address_prefix_length}"]
+  priority           = var.firewall_allow_priority
+
+  allow {
+    protocol = var.app_firewall_protocol_tcp
+    ports    = var.egress_ports_allow_tcp
+
+  }
+  target_tags = var.tags_public_subnet_route
+  depends_on  = [google_compute_global_address.default]
+}
+
+# # [START compute_internal_ip_private_access]
+# resource "google_compute_address" "default" {
+#   count        = var.num_vpcs
+#   provider     = google-beta
+#   project      = var.project_id
+#   region       = var.region
+#   name         = "global-psconnect-ip"
+#   address_type = "INTERNAL"
+#   # purpose      = "PRIVATE_SERVICE_CONNECT"
+#   subnetwork = google_compute_subnetwork.private_subnet[count.index].id
+#   address    = "192.169.0.10"
+# }
+# # [END compute_internal_ip_private_access]
+# data "google_sql_database_instance" "default" {
+#   name = google_sql_database_instance.webappdb[0].name
+# }
+# # [START compute_forwarding_rule_private_access]
+# resource "google_compute_forwarding_rule" "default" {
+#   count                 = var.num_vpcs
+#   provider              = google-beta
+#   project               = var.project_id
+#   region                = var.region
+#   name                  = "globalrule"
+#   target                = data.google_sql_database_instance.default.psc_service_attachment_link
+#   network               = google_compute_network.vpc[count.index].id
+#   ip_address            = google_compute_address.default[count.index].id
+#   load_balancing_scheme = ""
+# }
+# # [END compute_forwarding_rule_private_access]
+
+# create a firewall rule to deny egress to all protocols with priority 1000
