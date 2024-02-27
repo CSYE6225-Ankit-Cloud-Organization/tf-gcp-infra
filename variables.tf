@@ -153,6 +153,11 @@ variable "firewall_ports_allow_tcp" {
   default = ["6225"]
 }
 
+variable "egress_ports_allow_tcp" {
+  type    = list(string)
+  default = ["5432"]
+}
+
 variable "firewall_source_ranges" {
   type    = list(string)
   default = ["0.0.0.0/0"]
@@ -171,6 +176,121 @@ variable "firewall_allow_priority" {
   type    = number
   default = 900
 }
+
+variable "firewall_deny_db_access_name" {
+  type    = string
+  default = "deny-db-access"
+}
+
+variable "firewall_allow_db_access_name" {
+  type    = string
+  default = "allow-db-access"
+}
+
+
+# variables for database
+variable "database_name" {
+  type    = string
+  default = "webapp"
+}
+
+variable "database_user" {
+  type    = string
+  default = "webapp"
+}
+
+variable "sql_instance_dialect" {
+  type    = string
+  default = "postgres"
+}
+variable "db_port" {
+  type    = number
+  default = 5432
+}
+
+variable "webapp_port" {
+  type    = number
+  default = 6225
+}
+
+# global address variables
+variable "global_address_prefix_length" {
+  type    = number
+  default = 24
+}
+
+variable "global_address_name" {
+  type    = string
+  default = "webapp-test"
+}
+
+variable "global_address_purpose" {
+  type    = string
+  default = "VPC_PEERING"
+}
+
+variable "global_address_addresstype" {
+  type    = string
+  default = "INTERNAL"
+}
+
+variable "network_connection_servicename" {
+  type    = string
+  default = "servicenetworking.googleapis.com"
+}
+
+variable "delection_policy" {
+  type    = string
+  default = "ABANDON"
+}
+
+# variables for cloudsql instance
+
+variable "database_version" {
+  type    = string
+  default = "POSTGRES_14"
+}
+
+variable "deletion_protection" {
+  type    = bool
+  default = false
+}
+
+variable "cloudsql_tier" {
+  type    = string
+  default = "db-f1-micro"
+}
+
+variable "cloudsql_edition" {
+  type    = string
+  default = "ENTERPRISE"
+}
+
+variable "cloudsql_availability_type" {
+  type    = string
+  default = "REGIONAL"
+}
+
+variable "cloudsql_disk_type" {
+  type    = string
+  default = "PD_SSD"
+}
+
+variable "cloudsql_disk_size" {
+  type    = number
+  default = 100
+}
+
+variable "cloudsql_ipv4_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "env_file_path" {
+  type    = string
+  default = "/opt/csye6225/.env"
+}
+
 
 
 
