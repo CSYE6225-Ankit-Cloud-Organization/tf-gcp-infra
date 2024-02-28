@@ -51,5 +51,7 @@ resource "google_compute_instance" "my_instance" {
         # .env file already exists, skip adding values
         echo ".env file already exists, skipping adding values."
     fi
+    chown -R csye6225:csye6225 /opt/csye6225/.env
+    chmod -R 750  /opt/csye6225/.env
 EOT
 }
