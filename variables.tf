@@ -291,6 +291,43 @@ variable "env_file_path" {
   default = "/opt/csye6225/.env"
 }
 
+variable "opsagent_logfile" {
+  type    = string
+  default = "/var/log/webapp/webapp.log"
+}
+
+variable "dnsrecord_name" {
+  type = string
+}
+variable "dnsrecord_managedzone" {
+  type = string
+}
+
+variable "dnsrecord_type" {
+  type    = string
+  default = "A"
+}
+variable "dnsrecord_ttl" {
+  type    = number
+  default = 300
+}
+
+variable "service_account_id" {
+  type    = string
+  default = "logging-serviceaccount"
+}
+
+variable "service_account_name" {
+  type    = string
+  default = "Logging ServiceAccount"
+}
+variable "service_account_roles" {
+  type    = list(string)
+  default = ["roles/logging.admin", "roles/monitoring.metricWriter"]
+}
+
+
+
 
 
 

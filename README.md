@@ -4,7 +4,11 @@
 In order to create resources on GCP, we will have to enable some basic APIs. This can be done via Terraform.</p>
 
 <p>Below is a list of APIs that are required:<br>
-compute.googleapis.com</p>
+compute.googleapis.com<br>
+dns.googleapis.com<br>
+logging.googleapis.com<br>
+monitoring.googleapis.com<br>
+servicenetworking.googleapis.com</p>
 
 <p>Working with Terraform</p>
 
