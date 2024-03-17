@@ -23,8 +23,11 @@ resource "google_compute_instance" "my_instance" {
 
     subnetwork = google_compute_subnetwork.public_subnet[count.index].self_link
   }
-
-  depends_on              = [google_sql_database_instance.webappdb, google_sql_database.database, google_sql_user.users]
+  # allow_stopping_for_update = true
+  service_account {
+    email  = google_service_account.service_account.email
+    scopes = ["cloud-platform"]
+  }
   metadata_startup_script = <<-EOT
     #!/bin/bash
 
@@ -39,6 +42,7 @@ resource "google_compute_instance" "my_instance" {
         DB_DIALECT="${var.sql_instance_dialect}" 
         DB_PORT="${var.db_port}"
         APP_PORT="${var.webapp_port}"
+        LOG_FILE_PATH="${var.opsagent_logfile}"
 
         echo "DB_NAME=$DB_NAME" | sudo tee "$ENV_FILE"
         echo "DB_USER=$DB_USER" | sudo tee -a "$ENV_FILE"
@@ -47,6 +51,7 @@ resource "google_compute_instance" "my_instance" {
         echo "DB_HOSTNAME=$DB_HOSTNAME" | sudo tee -a "$ENV_FILE"
         echo "DB_DIALECT=$DB_DIALECT" | sudo tee -a "$ENV_FILE"
         echo "APP_PORT=$APP_PORT" | sudo tee -a "$ENV_FILE"
+        echo "LOG_FILE_PATH=$LOG_FILE_PATH" | sudo tee -a "$ENV_FILE"
     else
         # .env file already exists, skip adding values
         echo ".env file already exists, skipping adding values."
@@ -54,4 +59,7 @@ resource "google_compute_instance" "my_instance" {
     chown -R csye6225:csye6225 /opt/csye6225/.env
     chmod -R 750  /opt/csye6225/.env
 EOT
+
+  depends_on = [google_sql_database_instance.webappdb, google_sql_database.database, google_sql_user.users, google_service_account.service_account]
+
 }
