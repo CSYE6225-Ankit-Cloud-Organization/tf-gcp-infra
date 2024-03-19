@@ -309,7 +309,7 @@ variable "dnsrecord_type" {
 }
 variable "dnsrecord_ttl" {
   type    = number
-  default = 300
+  default = 60
 }
 
 variable "service_account_id" {
@@ -324,6 +324,11 @@ variable "service_account_name" {
 variable "service_account_roles" {
   type    = list(string)
   default = ["roles/logging.admin", "roles/monitoring.metricWriter"]
+}
+
+variable "service_account_scopes" {
+  type    = list(string)
+  default = ["cloud-platform"]
 }
 
 
