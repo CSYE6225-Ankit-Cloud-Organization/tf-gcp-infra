@@ -26,7 +26,7 @@ resource "google_compute_instance" "my_instance" {
   # allow_stopping_for_update = true
   service_account {
     email  = google_service_account.service_account.email
-    scopes = ["cloud-platform"]
+    scopes = var.service_account_scopes
   }
   metadata_startup_script = <<-EOT
     #!/bin/bash
