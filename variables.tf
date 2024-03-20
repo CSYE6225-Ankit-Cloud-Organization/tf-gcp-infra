@@ -150,7 +150,7 @@ variable "app_firewall_protocol_all" {
 
 variable "firewall_ports_allow_tcp" {
   type    = list(string)
-  default = ["6225"]
+  default = ["6225", "22"]
 }
 
 variable "egress_ports_allow_tcp" {
@@ -294,6 +294,11 @@ variable "env_file_path" {
 variable "opsagent_logfile" {
   type    = string
   default = "/var/log/webapp/webapp.log"
+}
+
+variable "log_severity" {
+  type    = string
+  default = "debug"
 }
 
 variable "dnsrecord_name" {
