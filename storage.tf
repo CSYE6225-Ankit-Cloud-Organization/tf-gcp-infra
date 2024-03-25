@@ -56,3 +56,20 @@ resource "google_sql_user" "users" {
   depends_on      = [random_password.password]
 }
 
+resource "google_storage_bucket" "default" {
+  name                        = "${random_id.random[0].hex}-gcf-source" # Every bucket name must be globally unique
+  location                    = var.gcs_bucket_location
+  uniform_bucket_level_access = var.uniform_bucket_level_access
+}
+
+data "archive_file" "default" {
+  type        = "zip"
+  output_path = var.archive_output_path
+  source_dir  = var.archive_source_path
+}
+
+resource "google_storage_bucket_object" "default" {
+  name   = var.google_storage_bucket_object_name
+  bucket = google_storage_bucket.default.name
+  source = data.archive_file.default.output_path # Path to the zipped function source code
+}

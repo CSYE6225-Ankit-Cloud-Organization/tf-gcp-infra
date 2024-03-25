@@ -321,20 +321,130 @@ variable "service_account_id" {
   type    = string
   default = "logging-serviceaccount"
 }
-
-variable "service_account_name" {
-  type    = string
-  default = "Logging ServiceAccount"
-}
 variable "service_account_roles" {
   type    = list(string)
-  default = ["roles/logging.admin", "roles/monitoring.metricWriter"]
+  default = ["roles/logging.admin", "roles/monitoring.metricWriter", "roles/pubsub.publisher", "roles/run.invoker"]
 }
 
 variable "service_account_scopes" {
   type    = list(string)
   default = ["cloud-platform"]
 }
+
+variable "topic_name" {
+  type = string
+}
+
+variable "sender_email" {
+  type = string
+}
+
+variable "sendgrid_api_key" {
+  type = string
+}
+
+variable "cloudfunction_service_account_id" {
+  type    = string
+  default = "cloudfunction-service-account"
+}
+
+variable "vpc_access_connector_iprange" {
+  type = string
+}
+
+variable "pubsub_message_retention_duration" {
+  type    = string
+  default = "604800s"
+}
+
+variable "gcs_bucket_location" {
+  type    = string
+  default = "US"
+}
+
+variable "uniform_bucket_level_access" {
+  type    = bool
+  default = true
+}
+
+variable "archive_output_path" {
+  type    = string
+  default = "/tmp/function-source.zip"
+}
+
+variable "archive_source_path" {
+  type = string
+}
+
+variable "google_storage_bucket_object_name" {
+  type    = string
+  default = "function-source.zip"
+}
+
+variable "sender_domain" {
+  type = string
+}
+variable "cloudfunction_entry_point" {
+  type    = string
+  default = "helloPubSub"
+}
+
+variable "cloudfunction_runtime" {
+  type    = string
+  default = "nodejs20"
+}
+variable "cloudfunction_available_memory" {
+  type    = string
+  default = "256M"
+}
+
+variable "cloudfunction_max_instance_count" {
+  type    = number
+  default = 1
+}
+
+variable "cloudfunction_min_instance_count" {
+  type    = number
+  default = 1
+}
+variable "cloudfunction_timeout_seconds" {
+  type    = number
+  default = 60
+}
+
+variable "cloudfunction_ingress_settings" {
+  type    = string
+  default = "ALLOW_INTERNAL_ONLY"
+}
+
+variable "cloudfunction_vpc_connector_egress_settings" {
+  type    = string
+  default = "PRIVATE_RANGES_ONLY"
+}
+
+variable "cloudfunction_all_traffic_on_latest_revision" {
+  type    = bool
+  default = true
+}
+
+variable "cloudfunction_retry_policy" {
+  type    = string
+  default = "RETRY_POLICY_RETRY"
+}
+
+variable "cloudfunction_event_trigger_event_type" {
+  type    = string
+  default = "google.cloud.pubsub.topic.v1.messagePublished"
+}
+
+
+
+
+
+
+
+
+
 
 
 

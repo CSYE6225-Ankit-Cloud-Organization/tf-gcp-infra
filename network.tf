@@ -85,34 +85,43 @@ resource "google_service_networking_connection" "private_service_access" {
   depends_on              = [google_compute_global_address.default]
   deletion_policy         = var.delection_policy
 }
-resource "google_compute_firewall" "deny_db_access" {
-  count              = var.num_vpcs
-  name               = var.firewall_deny_db_access_name
-  network            = google_compute_network.vpc[count.index].name
-  direction          = var.firewall_direction_egress
-  destination_ranges = ["${google_compute_global_address.default[count.index].address}/${var.global_address_prefix_length}"]
-  deny {
-    protocol = var.app_firewall_protocol_all
-  }
-  depends_on = [google_compute_global_address.default]
+
+# Connect Custom VPC Network to CloudSQL VPC Network. Add an external route in VPC Peering
+resource "google_vpc_access_connector" "connector" {
+  count         = var.num_vpcs
+  name          = "myvpcconnector-${random_id.random[count.index].hex}"
+  ip_cidr_range = var.vpc_access_connector_iprange
+  network       = google_compute_network.vpc[count.index].self_link
 }
 
-resource "google_compute_firewall" "allow_db" {
-  count              = var.num_vpcs
-  name               = var.firewall_allow_db_access_name
-  network            = google_compute_network.vpc[count.index].name
-  direction          = var.firewall_direction_egress
-  destination_ranges = ["${google_compute_global_address.default[count.index].address}/${var.global_address_prefix_length}"]
-  priority           = var.firewall_allow_priority
+# resource "google_compute_firewall" "deny_db_access" {
+#   count              = var.num_vpcs
+#   name               = var.firewall_deny_db_access_name
+#   network            = google_compute_network.vpc[count.index].name
+#   direction          = var.firewall_direction_egress
+#   destination_ranges = ["${google_compute_global_address.default[count.index].address}/${var.global_address_prefix_length}"]
+#   deny {
+#     protocol = var.app_firewall_protocol_all
+#   }
+#   depends_on = [google_compute_global_address.default]
+# }
 
-  allow {
-    protocol = var.app_firewall_protocol_tcp
-    ports    = var.egress_ports_allow_tcp
+# resource "google_compute_firewall" "allow_db" {
+#   count              = var.num_vpcs
+#   name               = var.firewall_allow_db_access_name
+#   network            = google_compute_network.vpc[count.index].name
+#   direction          = var.firewall_direction_egress
+#   destination_ranges = ["${google_compute_global_address.default[count.index].address}/${var.global_address_prefix_length}"]
+#   priority           = var.firewall_allow_priority
 
-  }
-  target_tags = var.tags_public_subnet_route
-  depends_on  = [google_compute_global_address.default]
-}
+#   allow {
+#     protocol = var.app_firewall_protocol_tcp
+#     ports    = var.egress_ports_allow_tcp
+
+#   }
+#   target_tags = var.tags_public_subnet_route
+#   depends_on  = [google_compute_global_address.default]
+# }
 
 # # [START compute_internal_ip_private_access]
 # resource "google_compute_address" "default" {
