@@ -44,6 +44,8 @@ resource "google_compute_instance" "my_instance" {
         APP_PORT="${var.webapp_port}"
         LOG_FILE_PATH="${var.opsagent_logfile}"
         LOG_LEVEL="${var.log_severity}"
+        TOPIC_NAME="${var.topic_name}"
+        SENDER_EMAIL="${var.sender_email}"
 
         echo "DB_NAME=$DB_NAME" | sudo tee "$ENV_FILE"
         echo "DB_USER=$DB_USER" | sudo tee -a "$ENV_FILE"
@@ -54,6 +56,8 @@ resource "google_compute_instance" "my_instance" {
         echo "APP_PORT=$APP_PORT" | sudo tee -a "$ENV_FILE"
         echo "LOG_FILE_PATH=$LOG_FILE_PATH" | sudo tee -a "$ENV_FILE"
         echo "LOG_LEVEL=$LOG_LEVEL" | sudo tee -a "$ENV_FILE"
+        echo "TOPIC_NAME=$TOPIC_NAME" | sudo tee -a "$ENV_FILE"
+        echo "SENDER_EMAIL=$SENDER_EMAIL" | sudo tee -a "$ENV_FILE"
     else
         # .env file already exists, skip adding values
         echo ".env file already exists, skipping adding values."
