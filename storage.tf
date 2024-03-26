@@ -6,7 +6,7 @@ resource "random_id" "random" {
 resource "random_password" "password" {
   count            = var.num_vpcs
   length           = 8
-  special          = true
+  special          = false
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 

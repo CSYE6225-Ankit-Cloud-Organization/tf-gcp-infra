@@ -28,10 +28,10 @@ resource "google_cloudfunctions2_function" "default" {
       SENDER_DOMAIN    = "${var.sender_domain}"
       APP_PORT         = "${var.webapp_port}"
     }
-    ingress_settings               = var.cloudfunction_ingress_settings
-    service_account_email          = google_service_account.cloudfunction.email
-    vpc_connector                  = google_vpc_access_connector.connector[0].self_link
-    vpc_connector_egress_settings  = var.cloudfunction_vpc_connector_egress_settings
+    ingress_settings              = var.cloudfunction_ingress_settings
+    service_account_email         = google_service_account.cloudfunction.email
+    vpc_connector                 = google_vpc_access_connector.connector[0].self_link
+    vpc_connector_egress_settings = var.cloudfunction_vpc_connector_egress_settings
   }
 
   event_trigger {
