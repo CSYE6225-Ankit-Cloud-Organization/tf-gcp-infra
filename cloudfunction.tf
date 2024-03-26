@@ -18,6 +18,7 @@ resource "google_cloudfunctions2_function" "default" {
     min_instance_count = var.cloudfunction_min_instance_count
     available_memory   = var.cloudfunction_available_memory
     timeout_seconds    = var.cloudfunction_timeout_seconds
+    available_cpu      = var.cloudfunction_available_cpu
     environment_variables = {
       DB_NAME          = "${google_sql_database.database[0].name}"
       DB_USER          = "${google_sql_user.users[0].name}"
@@ -28,7 +29,6 @@ resource "google_cloudfunctions2_function" "default" {
       APP_PORT         = "${var.webapp_port}"
     }
     ingress_settings               = var.cloudfunction_ingress_settings
-    all_traffic_on_latest_revision = var.cloudfunction_all_traffic_on_latest_revision
     service_account_email          = google_service_account.cloudfunction.email
     vpc_connector                  = google_vpc_access_connector.connector[0].self_link
     vpc_connector_egress_settings  = var.cloudfunction_vpc_connector_egress_settings
