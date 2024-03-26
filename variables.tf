@@ -437,12 +437,6 @@ variable "cloudfunction_available_cpu" {
   default = 1
 }
 
-variable "test_user" {
-  type    = string
-  default = "abc@example.com"
-}
-
-
 
 
 

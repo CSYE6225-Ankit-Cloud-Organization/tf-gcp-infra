@@ -46,7 +46,6 @@ resource "google_compute_instance" "my_instance" {
         LOG_LEVEL="${var.log_severity}"
         TOPIC_NAME="${var.topic_name}"
         SENDER_EMAIL="${var.sender_email}"
-        TEST_USER="${var.test_user}"
 
         echo "DB_NAME=$DB_NAME" | sudo tee "$ENV_FILE"
         echo "DB_USER=$DB_USER" | sudo tee -a "$ENV_FILE"
@@ -59,7 +58,6 @@ resource "google_compute_instance" "my_instance" {
         echo "LOG_LEVEL=$LOG_LEVEL" | sudo tee -a "$ENV_FILE"
         echo "TOPIC_NAME=$TOPIC_NAME" | sudo tee -a "$ENV_FILE"
         echo "SENDER_EMAIL=$SENDER_EMAIL" | sudo tee -a "$ENV_FILE"
-        echo "TEST_USER=$TEST_USER" | sudo tee -a "$ENV_FILE"
     else
         # .env file already exists, skip adding values
         echo ".env file already exists, skipping adding values."
