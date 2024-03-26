@@ -422,11 +422,6 @@ variable "cloudfunction_vpc_connector_egress_settings" {
   default = "PRIVATE_RANGES_ONLY"
 }
 
-variable "cloudfunction_all_traffic_on_latest_revision" {
-  type    = bool
-  default = true
-}
-
 variable "cloudfunction_retry_policy" {
   type    = string
   default = "RETRY_POLICY_RETRY"
@@ -435,6 +430,11 @@ variable "cloudfunction_retry_policy" {
 variable "cloudfunction_event_trigger_event_type" {
   type    = string
   default = "google.cloud.pubsub.topic.v1.messagePublished"
+}
+
+variable "cloudfunction_available_cpu" {
+  type    = number
+  default = 1
 }
 
 
