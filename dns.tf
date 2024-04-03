@@ -5,6 +5,5 @@ resource "google_dns_record_set" "a" {
   managed_zone = var.dnsrecord_managedzone
   type         = var.dnsrecord_type
   ttl          = var.dnsrecord_ttl
-  rrdatas      = [google_compute_instance.my_instance[count.index].network_interface[0].access_config[0].nat_ip]
-  depends_on   = [google_compute_instance.my_instance]
+  rrdatas      = [google_compute_global_forwarding_rule.default.ip_address]
 }

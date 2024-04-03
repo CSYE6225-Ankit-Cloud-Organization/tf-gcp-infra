@@ -20,13 +20,15 @@ resource "google_cloudfunctions2_function" "default" {
     timeout_seconds    = var.cloudfunction_timeout_seconds
     available_cpu      = var.cloudfunction_available_cpu
     environment_variables = {
-      DB_NAME          = "${google_sql_database.database[0].name}"
-      DB_USER          = "${google_sql_user.users[0].name}"
-      DB_PASSWORD      = "${random_password.password[0].result}"
-      DB_HOSTNAME      = "${google_sql_database_instance.webappdb[0].private_ip_address}"
-      SENDGRID_API_KEY = "${var.sendgrid_api_key}"
-      SENDER_DOMAIN    = "${var.sender_domain}"
-      APP_PORT         = "${var.webapp_port}"
+      DB_NAME                         = "${google_sql_database.database[0].name}"
+      DB_USER                         = "${google_sql_user.users[0].name}"
+      DB_PASSWORD                     = "${random_password.password[0].result}"
+      DB_HOSTNAME                     = "${google_sql_database_instance.webappdb[0].private_ip_address}"
+      SENDGRID_API_KEY                = "${var.sendgrid_api_key}"
+      SENDER_DOMAIN                   = "${var.sender_domain}"
+      APP_PORT                        = "${var.lb_port}"
+      APP_PROTOCOL                    = "${var.app_protocol}"
+      LINK_EXPIRATION_TIME_IN_MINUTES = "${var.link_expiration_time_in_minutes}"
     }
     ingress_settings              = var.cloudfunction_ingress_settings
     service_account_email         = google_service_account.cloudfunction.email
