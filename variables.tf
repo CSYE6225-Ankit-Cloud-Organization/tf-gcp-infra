@@ -98,7 +98,7 @@ variable "instance_name" {
 
 variable "machine_type" {
   type    = string
-  default = "e2-small"
+  default = "e2-medium"
 }
 
 variable "instance_zone" {
@@ -258,7 +258,7 @@ variable "deletion_protection" {
 
 variable "cloudsql_tier" {
   type    = string
-  default = "db-f1-micro"
+  default = "db-g1-small"
 }
 
 variable "cloudsql_edition" {
@@ -481,7 +481,7 @@ variable "boot" {
 
 variable "healthcheck_name" {
   type    = string
-  default = "wepapp-health-check"
+  default = "autohealing-health-check"
 }
 
 variable "check_interval_sec" {
@@ -614,6 +614,41 @@ variable "google_compute_global_forwarding_rule_portrange" {
 variable "link_expiration_time_in_minutes" {
   type    = number
   default = 2
+}
+
+variable "lb_healthcheck_name" {
+  type    = string
+  default = "loadbalancer-health-check"
+}
+
+variable "lb_check_interval_sec" {
+  type    = number
+  default = 10
+}
+
+variable "lb_timeout_sec" {
+  type    = number
+  default = 5
+}
+variable "lb_healthy_threshold" {
+  type    = number
+  default = 3
+}
+variable "lb_unhealthy_threshold" {
+  type    = number
+  default = 10
+}
+
+variable "scale_in_control_fixed" {
+  type    = number
+  default = 3
+
+}
+
+variable "scale_in_control_time_window_sec" {
+  type    = number
+  default = 200
+
 }
 
 
