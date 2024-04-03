@@ -150,7 +150,7 @@ variable "app_firewall_protocol_all" {
 
 variable "firewall_ports_allow_tcp" {
   type    = list(string)
-  default = ["6225", "22"]
+  default = ["6225", "22", "80"]
 }
 
 variable "egress_ports_allow_tcp" {
@@ -436,6 +436,186 @@ variable "cloudfunction_available_cpu" {
   type    = number
   default = 1
 }
+
+variable "lb_port" {
+  type    = number
+  default = 443
+}
+variable "app_protocol" {
+  type    = string
+  default = "https"
+}
+
+variable "ssl_certificate_name" {
+  type    = string
+  default = "webapp-certificate"
+}
+
+variable "healthcheck_firewall_sourcerange" {
+  type    = list(string)
+  default = ["130.211.0.0/22", "35.191.0.0/16"]
+}
+
+variable "healthcheck_firewall_name" {
+  type    = string
+  default = "fw-allow-health-check"
+}
+
+variable "can_ip_forward" {
+  type    = bool
+  default = false
+}
+variable "automatic_restart" {
+  type    = bool
+  default = true
+}
+variable "on_host_maintenance" {
+  type    = string
+  default = "MIGRATE"
+}
+
+variable "boot" {
+  type    = bool
+  default = true
+}
+
+variable "healthcheck_name" {
+  type    = string
+  default = "wepapp-health-check"
+}
+
+variable "check_interval_sec" {
+  type    = number
+  default = 10
+}
+
+variable "timeout_sec" {
+  type    = number
+  default = 5
+}
+variable "healthy_threshold" {
+  type    = number
+  default = 3
+}
+variable "unhealthy_threshold" {
+  type    = number
+  default = 10
+}
+
+variable "healthcheck_requestpath" {
+  type    = string
+  default = "/healthz"
+}
+
+variable "webapp_autoscaler_name" {
+  type    = string
+  default = "webapp-autoscaler"
+}
+
+variable "max_replicas" {
+  type    = number
+  default = 6
+}
+variable "min_replicas" {
+  type    = number
+  default = 3
+}
+variable "cooldown_period" {
+  type    = number
+  default = 100
+}
+variable "cpu_utilization_target" {
+  type    = number
+  default = 0.05
+}
+
+variable "instance_group_manager_name" {
+  type    = string
+  default = "appserver-igm"
+}
+variable "instance_group_manager_baseinstance_name" {
+  type    = string
+  default = "webapp"
+}
+variable "instance_group_distribution_policy_zones" {
+  type    = list(string)
+  default = ["us-central1-a", "us-central1-f", "us-central1-b"]
+}
+
+
+variable "named_port_name" {
+  type    = string
+  default = "webappport"
+}
+
+variable "healthcheck_policy_initial_delay_sec" {
+  type    = number
+  default = 200
+}
+variable "force_update_on_repair" {
+  type    = string
+  default = "YES"
+}
+variable "default_action_on_failure" {
+  type    = string
+  default = "REPAIR"
+}
+variable "google_compute_backend_service_name" {
+  type    = string
+  default = "web-backend-service"
+}
+variable "load_balancing_scheme" {
+  type    = string
+  default = "EXTERNAL_MANAGED"
+}
+
+variable "backend_service_protocol" {
+  type    = string
+  default = "HTTP"
+}
+variable "session_affinity" {
+  type    = string
+  default = "NONE"
+}
+variable "backend_service_timeout_sec" {
+  type    = number
+  default = 30
+}
+variable "connection_draining_timeout_sec" {
+  type    = number
+  default = 50
+}
+variable "capacity_scaler" {
+  type    = number
+  default = 1.0
+}
+
+variable "backend_service_balancing_mode" {
+  type    = string
+  default = "UTILIZATION"
+}
+variable "google_compute_url_map_name" {
+  type    = string
+  default = "web-map-http"
+}
+variable "google_compute_target_https_proxy_name" {
+  type    = string
+  default = "myservice-https-proxy"
+}
+variable "google_compute_global_forwarding_rule_name" {
+  type    = string
+  default = "http-content-rule"
+}
+variable "google_compute_global_forwarding_rule_portrange" {
+  type    = number
+  default = 443
+}
+
+variable "link_expiration_time_in_minutes" {
+  type    = number
+  default = 2
+}
+
 
 
 

@@ -39,20 +39,20 @@ resource "google_compute_route" "public_subnet_route" {
 }
 
 # create a firewall rule to allow application port ingress traffic with priority 900
-resource "google_compute_firewall" "allow_tcp" {
-  count     = var.num_vpcs
-  name      = var.webapp_allow_tcp_firewall_name
-  network   = google_compute_network.vpc[count.index].name
-  direction = var.firewall_direction_ingress
-  priority  = var.firewall_allow_priority
+# resource "google_compute_firewall" "allow_tcp" {
+#   count     = var.num_vpcs
+#   name      = var.webapp_allow_tcp_firewall_name
+#   network   = google_compute_network.vpc[count.index].name
+#   direction = var.firewall_direction_ingress
+#   priority  = var.firewall_allow_priority
 
-  allow {
-    protocol = var.app_firewall_protocol_tcp
-    ports    = var.firewall_ports_allow_tcp
-  }
-  source_ranges = var.firewall_source_ranges
-  target_tags   = var.tags_public_subnet_route
-}
+#   allow {
+#     protocol = var.app_firewall_protocol_tcp
+#     ports    = var.firewall_ports_allow_tcp
+#   }
+#   source_ranges = var.firewall_source_ranges
+#   target_tags   = var.tags_public_subnet_route
+# }
 
 # create a firewall rule to deny all protocols with priority 1000
 resource "google_compute_firewall" "deny_ssh" {
@@ -92,6 +92,19 @@ resource "google_vpc_access_connector" "connector" {
   name          = "myvpcconnector-${random_id.random[count.index].hex}"
   ip_cidr_range = var.vpc_access_connector_iprange
   network       = google_compute_network.vpc[count.index].self_link
+}
+
+# Firewall for instance group vm instances health check
+resource "google_compute_firewall" "default" {
+  name = var.healthcheck_firewall_name
+  allow {
+    protocol = var.app_firewall_protocol_tcp
+  }
+  direction     = var.firewall_direction_ingress
+  network       = google_compute_network.vpc[0].name
+  priority      = var.firewall_allow_priority
+  source_ranges = var.healthcheck_firewall_sourcerange
+  target_tags   = var.tags_public_subnet_route
 }
 
 # resource "google_compute_firewall" "deny_db_access" {
