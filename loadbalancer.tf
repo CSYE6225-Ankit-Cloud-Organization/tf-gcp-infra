@@ -1,7 +1,7 @@
 resource "google_compute_backend_service" "default" {
   name                            = var.google_compute_backend_service_name
   connection_draining_timeout_sec = var.connection_draining_timeout_sec
-  health_checks                   = [google_compute_health_check.autohealing.id]
+  health_checks                   = [google_compute_health_check.load_balancer.id]
   load_balancing_scheme           = var.load_balancing_scheme
   port_name                       = var.named_port_name
   protocol                        = var.backend_service_protocol

@@ -91,6 +91,18 @@ resource "google_compute_health_check" "autohealing" {
   }
 }
 
+resource "google_compute_health_check" "load_balancer" {
+  name                = var.lb_healthcheck_name
+  check_interval_sec  = var.lb_check_interval_sec
+  timeout_sec         = var.lb_timeout_sec
+  healthy_threshold   = var.lb_healthy_threshold
+  unhealthy_threshold = var.lb_unhealthy_threshold
+  http_health_check {
+    request_path = var.healthcheck_requestpath
+    port         = var.webapp_port
+  }
+}
+
 resource "google_compute_region_autoscaler" "webapp-autoscalar" {
   name   = var.webapp_autoscaler_name
   region = var.region
@@ -104,7 +116,14 @@ resource "google_compute_region_autoscaler" "webapp-autoscalar" {
     cpu_utilization {
       target = var.cpu_utilization_target
     }
+    scale_in_control {
+      max_scaled_in_replicas {
+        fixed = var.scale_in_control_fixed
+      }
+      time_window_sec = var.scale_in_control_time_window_sec
+    }
   }
+
 }
 
 resource "google_compute_region_instance_group_manager" "appserver" {
