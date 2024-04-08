@@ -17,7 +17,7 @@ resource "google_sql_database_instance" "webappdb" {
   database_version    = var.database_version
   region              = var.region
   deletion_protection = var.deletion_protection
-
+  encryption_key_name = google_kms_crypto_key.cloudsql_crypto_key.id
 
   settings {
     tier              = var.cloudsql_tier # Adjust based on your requirements
@@ -37,7 +37,10 @@ resource "google_sql_database_instance" "webappdb" {
       private_network = google_service_networking_connection.private_service_access[count.index].network
     }
   }
-  depends_on = [google_service_networking_connection.private_service_access, random_id.random]
+  depends_on = [google_service_networking_connection.private_service_access,
+    random_id.random,
+    google_kms_crypto_key.cloudsql_crypto_key,
+  google_kms_crypto_key_iam_binding.cloudsql_cmek]
 }
 
 
@@ -60,6 +63,11 @@ resource "google_storage_bucket" "default" {
   name                        = "${random_id.random[0].hex}-gcf-source" # Every bucket name must be globally unique
   location                    = var.gcs_bucket_location
   uniform_bucket_level_access = var.uniform_bucket_level_access
+  encryption {
+    # Specify the CMEK for the bucket
+    default_kms_key_name = google_kms_crypto_key.storage_crypto_key.id
+  }
+  depends_on = [google_kms_crypto_key.storage_crypto_key, google_kms_crypto_key_iam_binding.cloudstorage_cmek]
 }
 
 data "archive_file" "default" {

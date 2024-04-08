@@ -359,7 +359,7 @@ variable "pubsub_message_retention_duration" {
 
 variable "gcs_bucket_location" {
   type    = string
-  default = "US"
+  default = "us-central1"
 }
 
 variable "uniform_bucket_level_access" {
@@ -649,6 +649,25 @@ variable "scale_in_control_time_window_sec" {
   type    = number
   default = 200
 
+}
+
+variable "rotation_period" {
+  type    = string
+  default = "2592000s"
+}
+
+variable "google_project_service_identity_serviceaccount" {
+  type    = string
+  default = "sqladmin.googleapis.com"
+}
+variable "google_kms_key_service_accounts" {
+  type    = list(string)
+  default = ["service-312805086120@gs-project-accounts.iam.gserviceaccount.com", "service-312805086120@compute-system.iam.gserviceaccount.com", "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"]
+}
+
+variable "kms_key_roles" {
+  type    = list(string)
+  default = ["roles/cloudkms.cryptoKeyEncrypterDecrypter", "roles/compute.loadBalancerAdmin"]
 }
 
 

@@ -17,8 +17,10 @@ resource "google_compute_region_instance_template" "default" {
     boot         = var.boot
     disk_type    = var.boot_disk_type
     disk_size_gb = var.boot_disk_size
+    disk_encryption_key {
+      kms_key_self_link = google_kms_crypto_key.vm_crypto_key.id
+    }
   }
-
   network_interface {
     access_config {
       network_tier = var.instance_network_tier
@@ -75,7 +77,8 @@ EOT
   depends_on = [google_sql_database_instance.webappdb,
     google_sql_database.database,
     google_sql_user.users,
-  google_service_account.service_account]
+    google_service_account.service_account,
+  google_kms_crypto_key_iam_binding.vm_cmek]
 
 }
 
