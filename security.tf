@@ -54,7 +54,7 @@ resource "google_kms_crypto_key_iam_binding" "cloudsql_cmek" {
 resource "google_kms_crypto_key_iam_binding" "cloudstorage_cmek" {
   provider      = google-beta
   crypto_key_id = google_kms_crypto_key.storage_crypto_key.id
-  role          = var.kms_key_roles[1]
+  role          = var.kms_key_roles[0]
 
   members = [
     "serviceAccount:${var.google_kms_key_service_accounts[0]}",
@@ -74,7 +74,7 @@ resource "google_kms_crypto_key_iam_binding" "vm_cmek" {
 resource "google_project_iam_member" "example" {
   project = var.project_id
   role    = var.kms_key_roles[1]
-  member  = "serviceAccount:${var.google_kms_key_service_accounts[2]}"
+  member  = "serviceAccount:${var.google_kms_key_service_accounts[1]}"
 }
 
 
