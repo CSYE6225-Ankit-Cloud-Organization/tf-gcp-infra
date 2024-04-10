@@ -656,13 +656,17 @@ variable "rotation_period" {
   default = "2592000s"
 }
 
+variable "destroy_scheduled_duration" {
+  type    = string
+  default = "86400s"
+}
+
 variable "google_project_service_identity_serviceaccount" {
   type    = string
   default = "sqladmin.googleapis.com"
 }
 variable "google_kms_key_service_accounts" {
-  type    = list(string)
-  default = ["service-312805086120@gs-project-accounts.iam.gserviceaccount.com", "service-312805086120@compute-system.iam.gserviceaccount.com", "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"]
+  type = list(string)
 }
 
 variable "kms_key_roles" {
