@@ -15,24 +15,26 @@ resource "google_kms_key_ring" "my_key_ring" {
 }
 
 resource "google_kms_crypto_key" "vm_crypto_key" {
-  name            = "webapp-vm-cmek-${random_id.random[0].hex}"
-  key_ring        = google_kms_key_ring.my_key_ring.id
-  rotation_period = var.rotation_period # 30 day rotation period
+  name                       = "webapp-vm-cmek-${random_id.random[0].hex}"
+  key_ring                   = google_kms_key_ring.my_key_ring.id
+  rotation_period            = var.rotation_period # 30 day rotation period
+  destroy_scheduled_duration = var.destroy_scheduled_duration
 }
 
 resource "google_kms_crypto_key" "cloudsql_crypto_key" {
-  provider        = google-beta
-  name            = "webapp-cloudsql-cmek-${random_id.random[0].hex}"
-  key_ring        = google_kms_key_ring.my_key_ring.id
-  rotation_period = var.rotation_period
-  purpose         = "ENCRYPT_DECRYPT"
+  provider                   = google-beta
+  name                       = "webapp-cloudsql-cmek-${random_id.random[0].hex}"
+  key_ring                   = google_kms_key_ring.my_key_ring.id
+  rotation_period            = var.rotation_period
+  destroy_scheduled_duration = var.destroy_scheduled_duration
 }
 
 resource "google_kms_crypto_key" "storage_crypto_key" {
-  provider        = google-beta
-  name            = "webapp-storage-cmek-${random_id.random[0].hex}"
-  key_ring        = google_kms_key_ring.my_key_ring.id
-  rotation_period = var.rotation_period
+  provider                   = google-beta
+  name                       = "webapp-storage-cmek-${random_id.random[0].hex}"
+  key_ring                   = google_kms_key_ring.my_key_ring.id
+  rotation_period            = var.rotation_period
+  destroy_scheduled_duration = var.destroy_scheduled_duration
 }
 
 # To use with cloud sql 
@@ -74,7 +76,7 @@ resource "google_kms_crypto_key_iam_binding" "vm_cmek" {
 resource "google_project_iam_member" "example" {
   project = var.project_id
   role    = var.kms_key_roles[1]
-  member  = "serviceAccount:${var.google_kms_key_service_accounts[1]}"
+  member  = "serviceAccount:${var.google_kms_key_service_accounts[2]}"
 }
 
 
