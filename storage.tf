@@ -1,8 +1,10 @@
+# Creates a random id to be used by resources like cloudsql instance resource
 resource "random_id" "random" {
   count       = var.num_vpcs
   byte_length = 4
 }
 
+# Creates a random password to be used by cloudsql instance resource
 resource "random_password" "password" {
   count            = var.num_vpcs
   length           = 8
@@ -10,7 +12,7 @@ resource "random_password" "password" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
-
+# Creates a cloud sql database instance 
 resource "google_sql_database_instance" "webappdb" {
   count               = var.num_vpcs
   name                = "mydb-${random_id.random[count.index].hex}"
@@ -27,10 +29,6 @@ resource "google_sql_database_instance" "webappdb" {
     disk_size         = var.cloudsql_disk_size
 
     ip_configuration {
-      # psc_config {
-      #   psc_enabled               = true
-      #   allowed_consumer_projects = [var.project_id]
-      # }
       ipv4_enabled = var.cloudsql_ipv4_enabled
 
       # For private network configuration
@@ -43,13 +41,15 @@ resource "google_sql_database_instance" "webappdb" {
   google_kms_crypto_key_iam_binding.cloudsql_cmek]
 }
 
-
+# Creates a cloud sql database
 resource "google_sql_database" "database" {
   count    = var.num_vpcs
   name     = var.database_name
   instance = google_sql_database_instance.webappdb[count.index].name
 }
 
+
+# Creates a new cloud sql user
 resource "google_sql_user" "users" {
   count           = var.num_vpcs
   name            = var.database_user
@@ -59,6 +59,7 @@ resource "google_sql_user" "users" {
   depends_on      = [random_password.password]
 }
 
+# Creates a new cloud storage bucket
 resource "google_storage_bucket" "default" {
   name                        = "${random_id.random[0].hex}-gcf-source" # Every bucket name must be globally unique
   location                    = var.gcs_bucket_location
@@ -70,12 +71,14 @@ resource "google_storage_bucket" "default" {
   depends_on = [google_kms_crypto_key.storage_crypto_key, google_kms_crypto_key_iam_binding.cloudstorage_cmek]
 }
 
+# This code will zip the folder in source_dir and put it in output_path
 data "archive_file" "default" {
   type        = "zip"
   output_path = var.archive_output_path
   source_dir  = var.archive_source_path
 }
 
+# Creates a new object, here zip file and but it in a google cloud storage bucket
 resource "google_storage_bucket_object" "default" {
   name   = var.google_storage_bucket_object_name
   bucket = google_storage_bucket.default.name

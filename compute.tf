@@ -1,3 +1,5 @@
+# Create a regional instance template
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_instance_template
 resource "google_compute_region_instance_template" "default" {
   count          = var.num_vpcs
   name           = var.instance_name
@@ -82,6 +84,8 @@ EOT
 
 }
 
+# Creates a global compute health check for autohealing of instances in Managed Instance Groups(MIG)
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_health_check
 resource "google_compute_health_check" "autohealing" {
   name                = var.healthcheck_name
   check_interval_sec  = var.check_interval_sec
@@ -94,6 +98,8 @@ resource "google_compute_health_check" "autohealing" {
   }
 }
 
+# Creates a global compute health check for load balancing of instances in Managed Instance Groups(MIG)
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_health_check
 resource "google_compute_health_check" "load_balancer" {
   name                = var.lb_healthcheck_name
   check_interval_sec  = var.lb_check_interval_sec
@@ -106,6 +112,12 @@ resource "google_compute_health_check" "load_balancer" {
   }
 }
 
+/*
+Create a regional autoscaler that allows automatic scaling of virtual machine 
+instances in managed instance groups according to an autoscaling policy that
+is defined here
+https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_autoscaler
+*/
 resource "google_compute_region_autoscaler" "webapp-autoscalar" {
   name   = var.webapp_autoscaler_name
   region = var.region
@@ -129,6 +141,12 @@ resource "google_compute_region_autoscaler" "webapp-autoscalar" {
 
 }
 
+/*
+The Google Compute Engine Regional Instance Group Manager API creates and 
+manages pools of homogeneous Compute Engine virtual machine instances 
+from a common instance template
+https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_instance_group_manager
+*/
 resource "google_compute_region_instance_group_manager" "appserver" {
   name = var.instance_group_manager_name
 
@@ -156,13 +174,10 @@ resource "google_compute_region_instance_group_manager" "appserver" {
     force_update_on_repair    = var.force_update_on_repair
     default_action_on_failure = var.default_action_on_failure
   }
-  #   update_policy {
-  #     instance_redistribution_type = "NONE"
-  # minimal_action = 
-  #   }
 }
 
-# # create VM from the custom image
+# Creates VM from the custom image. This resource is replaced by instance template resource.
+
 # resource "google_compute_instance" "my_instance" {
 #   count        = var.num_vpcs
 #   name         = var.instance_name

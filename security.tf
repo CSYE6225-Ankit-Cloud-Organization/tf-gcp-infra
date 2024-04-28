@@ -8,12 +8,14 @@ resource "google_compute_managed_ssl_certificate" "lb_default" {
   }
 }
 
+# Creates a KMS key ring resource
 resource "google_kms_key_ring" "my_key_ring" {
   name     = "webapp-keyring-demo-${random_id.random[0].hex}"
   provider = google-beta
   location = var.region
 }
 
+# Creates a CMEK key for disk encryption of the disks of VMs in MIG
 resource "google_kms_crypto_key" "vm_crypto_key" {
   name                       = "webapp-vm-cmek-${random_id.random[0].hex}"
   key_ring                   = google_kms_key_ring.my_key_ring.id
@@ -21,6 +23,7 @@ resource "google_kms_crypto_key" "vm_crypto_key" {
   destroy_scheduled_duration = var.destroy_scheduled_duration
 }
 
+# Creates a CMEK key for encrpytion of cloudsql resource
 resource "google_kms_crypto_key" "cloudsql_crypto_key" {
   provider                   = google-beta
   name                       = "webapp-cloudsql-cmek-${random_id.random[0].hex}"
@@ -29,6 +32,7 @@ resource "google_kms_crypto_key" "cloudsql_crypto_key" {
   destroy_scheduled_duration = var.destroy_scheduled_duration
 }
 
+# Created a CMEK key for encryption of cloud storage bucket
 resource "google_kms_crypto_key" "storage_crypto_key" {
   provider                   = google-beta
   name                       = "webapp-storage-cmek-${random_id.random[0].hex}"
@@ -37,7 +41,7 @@ resource "google_kms_crypto_key" "storage_crypto_key" {
   destroy_scheduled_duration = var.destroy_scheduled_duration
 }
 
-# To use with cloud sql 
+# A special service account which needs to be used with cloud sql
 resource "google_project_service_identity" "gcp_sa_cloud_sql" {
   provider = google-beta
   service  = var.google_project_service_identity_serviceaccount
