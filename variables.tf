@@ -21,7 +21,6 @@ variable "public_subnet_name_prefix" {
 variable "public_subnet_cidr_base" {
   type        = string
   description = "Base CIDR range for public subnets"
-
 }
 
 # Variables for private subnet
