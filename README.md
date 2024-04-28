@@ -4,27 +4,29 @@
 In order to create resources on GCP, we will have to enable some basic APIs. This can be done via Terraform.</p>
 
 <p>Below is a list of APIs that are required:<br>
-- Compute Engine API: compute.googleapis.com<br>
-- Serverless VPC Access API: vpcaccess.googleapis.com<br>
-- Artifact Registry API: artifactregistry.googleapis.com<br>
-- Certificate Manager API: privateca.googleapis.com<br>
-- Cloud Build API: cloudbuild.googleapis.com<br>
-- Cloud Deployment Manager V2 API: deploymentmanager.googleapis.com<br>
-- Cloud DNS API: dns.googleapis.com<br>
-- Cloud Functions API: cloudfunctions.googleapis.com<br>
-- Cloud Key Management Service (KMS) API: cloudkms.googleapis.com<br>
-- Cloud Logging API: logging.googleapis.com<br>
-- Cloud Monitoring API: monitoring.googleapis.com<br>
-- Cloud OS Login API: oslogin.googleapis.com<br>
-- Cloud Pub/Sub API: pubsub.googleapis.com<br>
-- Cloud Run Admin API: run.googleapis.com<br>
-- Cloud SQL Admin API: sqladmin.googleapis.com<br>
-- Cloud Storage: storage.googleapis.com<br>
-- Container Registry API: containerregistry.googleapis.com<br>
-- Eventarc API: eventarc.googleapis.com<br>
-- Google Cloud Storage JSON API: storage-api.googleapis.com<br>
-- Legacy Cloud Source Repositories API: sourcerepo.googleapis.com<br>
-- Service Networking API: servicenetworking.googleapis.com</p>
+<ol>
+  <li>Compute Engine API: <code>compute.googleapis.com</code></li>
+  <li>Serverless VPC Access API: <code>vpcaccess.googleapis.com</code></li>
+  <li>Artifact Registry API: <code>artifactregistry.googleapis.com</code></li>
+  <li>Certificate Manager API: <code>privateca.googleapis.com</code></li>
+  <li>Cloud Build API: <code>cloudbuild.googleapis.com</code></li>
+  <li>Cloud Deployment Manager V2 API: <code>deploymentmanager.googleapis.com</code></li>
+  <li>Cloud DNS API: <code>dns.googleapis.com</code></li>
+  <li>Cloud Functions API: <code>cloudfunctions.googleapis.com</code></li>
+  <li>Cloud Key Management Service (KMS) API: <code>cloudkms.googleapis.com</code></li>
+  <li>Cloud Logging API: <code>logging.googleapis.com</code></li>
+  <li>Cloud Monitoring API: <code>monitoring.googleapis.com</code></li>
+  <li>Cloud OS Login API: <code>oslogin.googleapis.com</code></li>
+  <li>Cloud Pub/Sub API: <code>pubsub.googleapis.com</code></li>
+  <li>Cloud Run Admin API: <code>run.googleapis.com</code></li>
+  <li>Cloud SQL Admin API: <code>sqladmin.googleapis.com</code></li>
+  <li>Cloud Storage: <code>storage.googleapis.com</code></li>
+  <li>Container Registry API: <code>containerregistry.googleapis.com</code></li>
+  <li>Eventarc API: <code>eventarc.googleapis.com</code></li>
+  <li>Google Cloud Storage JSON API: <code>storage-api.googleapis.com</code></li>
+  <li>Legacy Cloud Source Repositories API: <code>sourcerepo.googleapis.com</code></li>
+  <li>Service Networking API: <code>servicenetworking.googleapis.com</code></li>
+</ol>
 
 <p>Working with Terraform</p>
 
