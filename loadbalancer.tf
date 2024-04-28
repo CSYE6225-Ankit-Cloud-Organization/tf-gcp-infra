@@ -1,3 +1,4 @@
+# Setup the backend service for our load balancer
 resource "google_compute_backend_service" "default" {
   name                            = var.google_compute_backend_service_name
   connection_draining_timeout_sec = var.connection_draining_timeout_sec
@@ -14,11 +15,13 @@ resource "google_compute_backend_service" "default" {
   }
 }
 
+# Creates a computer url map resource
 resource "google_compute_url_map" "default" {
   name            = var.google_compute_url_map_name
   default_service = google_compute_backend_service.default.id
 }
 
+# Creates a https proxy to be used by our google ssl certificate and load balancer
 resource "google_compute_target_https_proxy" "default" {
   provider         = google-beta
   name             = var.google_compute_target_https_proxy_name
@@ -29,6 +32,7 @@ resource "google_compute_target_https_proxy" "default" {
   ]
 }
 
+# Creates a global forwarding rule for our load balancer
 resource "google_compute_global_forwarding_rule" "default" {
   name                  = var.google_compute_global_forwarding_rule_name
   ip_protocol           = var.app_firewall_protocol_tcp

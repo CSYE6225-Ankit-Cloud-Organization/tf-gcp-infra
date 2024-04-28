@@ -1,4 +1,4 @@
-# Adding an A record 
+# Adding an A record to our custom zone
 resource "google_dns_record_set" "a" {
   count        = var.num_vpcs
   name         = var.dnsrecord_name

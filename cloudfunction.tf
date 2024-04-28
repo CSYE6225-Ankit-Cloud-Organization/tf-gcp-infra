@@ -1,3 +1,4 @@
+# Creates a serverless resource - cloud functions
 resource "google_cloudfunctions2_function" "default" {
   name     = "mycloudfunction-${random_id.random[0].hex}"
   location = var.region

@@ -135,35 +135,3 @@ resource "google_compute_firewall" "default" {
 #   target_tags = var.tags_public_subnet_route
 #   depends_on  = [google_compute_global_address.default]
 # }
-
-# # [START compute_internal_ip_private_access]
-# resource "google_compute_address" "default" {
-#   count        = var.num_vpcs
-#   provider     = google-beta
-#   project      = var.project_id
-#   region       = var.region
-#   name         = "global-psconnect-ip"
-#   address_type = "INTERNAL"
-#   # purpose      = "PRIVATE_SERVICE_CONNECT"
-#   subnetwork = google_compute_subnetwork.private_subnet[count.index].id
-#   address    = "192.169.0.10"
-# }
-# # [END compute_internal_ip_private_access]
-# data "google_sql_database_instance" "default" {
-#   name = google_sql_database_instance.webappdb[0].name
-# }
-# # [START compute_forwarding_rule_private_access]
-# resource "google_compute_forwarding_rule" "default" {
-#   count                 = var.num_vpcs
-#   provider              = google-beta
-#   project               = var.project_id
-#   region                = var.region
-#   name                  = "globalrule"
-#   target                = data.google_sql_database_instance.default.psc_service_attachment_link
-#   network               = google_compute_network.vpc[count.index].id
-#   ip_address            = google_compute_address.default[count.index].id
-#   load_balancing_scheme = ""
-# }
-# # [END compute_forwarding_rule_private_access]
-
-# create a firewall rule to deny egress to all protocols with priority 1000
